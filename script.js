@@ -14,7 +14,7 @@ const names = {
 const shifts = {};
 
 
-// ===== 月セレクト生成 =====
+// 月セレクト生成
 for (let m = 1; m <= 12; m++) {
   const o = document.createElement("option");
   o.value = m;
@@ -25,7 +25,7 @@ for (let m = 1; m <= 12; m++) {
 monthSelect.addEventListener("change", renderCalendar);
 
 
-// ===== 休業日判定 =====
+// 休業日判定
 function isClosed(month, day) {
   const d = new Date(year, month - 1, day);
   const w = d.getDay();
@@ -41,7 +41,7 @@ function isClosed(month, day) {
 }
 
 
-// ===== カレンダー描画 =====
+// カレンダー描画
 function renderCalendar() {
   calendarEl.innerHTML = "";
 
@@ -51,7 +51,6 @@ function renderCalendar() {
 
   const weeks = ["日","月","火","水","木","金","土"];
 
-  // 曜日ヘッダー
   weeks.forEach((w, i) => {
     const div = document.createElement("div");
     div.className = "week";
@@ -61,12 +60,10 @@ function renderCalendar() {
     calendarEl.appendChild(div);
   });
 
-  // 空白
   for (let i = 0; i < firstDay; i++) {
     calendarEl.appendChild(document.createElement("div"));
   }
 
-  // 日付ループ
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${month}-${d}`;
     const dayDiv = document.createElement("div");
@@ -88,10 +85,8 @@ function renderCalendar() {
       dayDiv.appendChild(c);
     } else {
       if (count < MIN) dayDiv.classList.add("low");
-      if (count > MAX) dayDiv.classList.add("over");
     }
 
-    // シフト表示
     if (shifts[key]) {
       shifts[key].forEach(p => {
         const s = document.createElement("div");
@@ -101,7 +96,6 @@ function renderCalendar() {
       });
     }
 
-    // 人数表示
     if (!closed) {
       const cnt = document.createElement("div");
       cnt.className = "count";
@@ -126,7 +120,7 @@ function renderCalendar() {
 }
 
 
-// ===== シフト追加削除 =====
+// シフト追加削除
 function toggleShift(key) {
   const person = personSelect.value;
   if (!person) return;
@@ -144,10 +138,7 @@ function toggleShift(key) {
 }
 
 
-// ===== ★ここが今回の修正ポイント★ =====
-// ページを開いたとき「今月」を自動表示
+// ⭐ページを開いたとき今月表示
 const today = new Date();
-const currentMonth = today.getMonth() + 1;
-
-monthSelect.value = currentMonth;
+monthSelect.value = today.getMonth() + 1;
 renderCalendar();
