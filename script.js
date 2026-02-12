@@ -13,27 +13,35 @@ const names = {
 
 const shifts = {};
 
-// 月セレクト
+
+// ===== 月セレクト生成 =====
 for (let m = 1; m <= 12; m++) {
   const o = document.createElement("option");
   o.value = m;
   o.textContent = `${m}月`;
   monthSelect.appendChild(o);
 }
+
 monthSelect.addEventListener("change", renderCalendar);
 
-// 休業日判定
+
+// ===== 休業日判定 =====
 function isClosed(month, day) {
   const d = new Date(year, month - 1, day);
   const w = d.getDay();
+
   if (w === 0) return true;
+
   if (w === 1) {
     const week = Math.ceil(day / 7);
     if (week === 1 || week === 3) return true;
   }
+
   return false;
 }
 
+
+// ===== カレンダー描画 =====
 function renderCalendar() {
   calendarEl.innerHTML = "";
 
@@ -42,6 +50,8 @@ function renderCalendar() {
   const daysInMonth = new Date(year, month, 0).getDate();
 
   const weeks = ["日","月","火","水","木","金","土"];
+
+  // 曜日ヘッダー
   weeks.forEach((w, i) => {
     const div = document.createElement("div");
     div.className = "week";
@@ -51,10 +61,12 @@ function renderCalendar() {
     calendarEl.appendChild(div);
   });
 
+  // 空白
   for (let i = 0; i < firstDay; i++) {
     calendarEl.appendChild(document.createElement("div"));
   }
 
+  // 日付ループ
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${month}-${d}`;
     const dayDiv = document.createElement("div");
@@ -79,6 +91,7 @@ function renderCalendar() {
       if (count > MAX) dayDiv.classList.add("over");
     }
 
+    // シフト表示
     if (shifts[key]) {
       shifts[key].forEach(p => {
         const s = document.createElement("div");
@@ -88,6 +101,7 @@ function renderCalendar() {
       });
     }
 
+    // 人数表示
     if (!closed) {
       const cnt = document.createElement("div");
       cnt.className = "count";
@@ -111,6 +125,8 @@ function renderCalendar() {
   }
 }
 
+
+// ===== シフト追加削除 =====
 function toggleShift(key) {
   const person = personSelect.value;
   if (!person) return;
@@ -127,5 +143,11 @@ function toggleShift(key) {
   renderCalendar();
 }
 
-monthSelect.value = 1;
+
+// ===== ★ここが今回の修正ポイント★ =====
+// ページを開いたとき「今月」を自動表示
+const today = new Date();
+const currentMonth = today.getMonth() + 1;
+
+monthSelect.value = currentMonth;
 renderCalendar();
