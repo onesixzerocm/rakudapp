@@ -1,1 +1,148 @@
+:root {
+  --main: #0f1e3d;
+  --sub: #e6ebf5;
+}
 
+body {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  background: #fff;
+  color: var(--main);
+  padding: 30px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+h1 {
+  margin-bottom: 15px;
+  letter-spacing: 0.1em;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.rule {
+  font-size: 13px;
+  color: #444;
+}
+
+/* ===== カレンダー ===== */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.week {
+  text-align: center;
+  font-weight: bold;
+}
+
+.week.sun { color: #c0392b; }
+.week.sat { color: #2980b9; }
+
+.day {
+  position: relative;
+  border: 1px solid var(--sub);
+  border-radius: 8px;
+  padding: 8px;
+  min-height: 110px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.day:hover {
+  background: #f6f8fc;
+}
+
+.day-number {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* ===== 日単位の状態（半透明）===== */
+.day.low::after,
+.day.over::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.day.low::after {
+  background: rgba(231, 76, 60, 0.12); /* 人手不足 */
+}
+
+.day.over::after {
+  background: transparent; /* 7人超の黄色背景を消す */
+}
+
+/* ===== 休業日 ===== */
+.day.closed {
+  background: #f2f2f2;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.day.closed::after {
+  display: none;
+}
+
+.closed-label {
+  font-size: 12px;
+}
+
+/* ===== シフト（人ごとの透かし色）===== */
+.shift {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  padding: 4px 6px;
+  margin: 2px 0;
+  border-radius: 4px;
+  color: #222;
+}
+
+/* 画像ベース10色 */
+.shift.p0 { background: rgba(214,48,49,0.18); }
+.shift.p1 { background: rgba(255,118,117,0.18); }
+.shift.p2 { background: rgba(253,203,110,0.22); }
+.shift.p3 { background: rgba(241,196,15,0.22); }
+.shift.p4 { background: rgba(163,203,56,0.22); }
+.shift.p5 { background: rgba(39,174,96,0.20); }
+.shift.p6 { background: rgba(0,184,148,0.20); }
+.shift.p7 { background: rgba(9,132,227,0.20); }
+.shift.p8 { background: rgba(45,52,54,0.20); }
+.shift.p9 { background: rgba(108,92,231,0.20); }
+
+/* ===== 人数表示 ===== */
+.count {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  font-size: 11px;
+  color: #555;
+  z-index: 1;
+}
+
+/* ===== 人手不足テキスト ===== */
+.shortage {
+  font-size: 11px;
+  color: #c0392b;
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+}
