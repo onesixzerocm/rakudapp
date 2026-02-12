@@ -11,7 +11,18 @@ const names = {
   p5: "渡辺", p6: "山本", p7: "中村", p8: "小林", p9: "加藤"
 };
 
-const shifts = {};
+let shifts = {};
+
+
+// ⭐ 保存・読み込み機能
+function saveShifts() {
+  localStorage.setItem("rakudaShifts", JSON.stringify(shifts));
+}
+
+function loadShifts() {
+  const data = localStorage.getItem("rakudaShifts");
+  if (data) shifts = JSON.parse(data);
+}
 
 
 // 月セレクト生成
@@ -101,13 +112,6 @@ function renderCalendar() {
       cnt.className = "count";
       cnt.textContent = `${count} / ${MAX}`;
       dayDiv.appendChild(cnt);
-
-      if (count > 0 && count < MIN) {
-        const warn = document.createElement("div");
-        warn.className = "shortage";
-        warn.textContent = "人手不足です！";
-        dayDiv.appendChild(warn);
-      }
     }
 
     dayDiv.addEventListener("click", () => {
@@ -120,7 +124,7 @@ function renderCalendar() {
 }
 
 
-// シフト追加削除
+// シフト切替
 function toggleShift(key) {
   const person = personSelect.value;
   if (!person) return;
@@ -134,11 +138,15 @@ function toggleShift(key) {
     shifts[key].push(person);
   }
 
+  saveShifts();   // ⭐ここが保存
   renderCalendar();
 }
 
 
-// ⭐ページを開いたとき今月表示
+// 初期化
+loadShifts();
+
 const today = new Date();
 monthSelect.value = today.getMonth() + 1;
+
 renderCalendar();
